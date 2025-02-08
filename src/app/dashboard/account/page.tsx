@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
+import DashboardLayout from '../DashboardLayout';
 
-const page = () => {
+const Account = () => {
   return (
-    <div>
-      account
-    </div>
-  )
+    <DashboardLayout>    <div>
+      <h1>Account Details</h1>
+      {/* Sayfa içeriği */}
+    </div></DashboardLayout>
+
+  );
 }
 
-export default page
+export default Account;

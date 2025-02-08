@@ -1,29 +1,29 @@
 'use client';
-
-import { auth } from '@/firebase/firebaseConfig';
-import { signOut } from 'firebase/auth';
+import { useAuth } from '@/firebase/FirebaseProvider';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import DashboardLayout from './DashboardLayout';
 
-const DashboardPage = () => {
+export default function DashboardPage() {
+  const { user, loading } = useAuth();
   const router = useRouter();
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    document.cookie = 'auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    router.push('/auth/login');
-  };
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/auth/login'); 
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4">Welcome to Dashboard</h1>
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-      >
-        Logout
-      </button>
-    </div>
+    <DashboardLayout>
+      <div>
+        <h1>Welcome, {user?.email}</h1>
+        {/* Diğer dashboard içeriği */}
+      </div>
+    </DashboardLayout>
   );
-};
-
-export default DashboardPage;
+}
